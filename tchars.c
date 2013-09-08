@@ -27,7 +27,7 @@
 ** OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
-** $Id$
+** $Id: tchars.c,v 0.2 2013/07/11 20:18:49 pj Exp pj $
 */
 
 #include <stdio.h>
@@ -327,24 +327,49 @@ hexatochars(unsigned hexa)
 {
 	char a=0, b=0, c=0, d=0, e=0, f=0;
 
+	/*
+	** From U+000 to U+007F
+	** Utf8 is coded on 1 byte of the form:
+	** 0xxxxxxx
+	*/
 	if (hexa<0x0080) {
 		a = hexa; // 0xxxxxxx
 	}
+	/*
+	** From U+0080 to U+07FF
+	** Utf8 is coded on 2 byte of the form:
+	** 110xxxxx 10xxxxxx
+	*/
 	else if (hexa < 0x800) {
 		a = ((hexa >> 6) | 0xC0); // 110xxxxx
 		b = ((hexa & 0x3F) | 0x80); // 10xxxxxx
 	}
+	/*
+	** From U+0800 to U+FFFF
+	** Utf8 is coded on 3 byte of the form:
+	** 1110xxxx 10xxxxxx 10xxxxxx
+	*/
 	else if (hexa < 0x10000) {
 		a = ((hexa >> 12) | 0xE0); // 1110xxxx
 		b = (( (hexa >> 6) & 0x3F) | 0x80);
 		c = ((hexa & 0x3F) | 0x80);
 	}
+	/*
+	** From U+10000	to U+1FFFFF
+	** Utf8 is coded on 4 byte of the form:
+	** 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+	*/
 	else if (hexa < 0x200000) {
 		a = ((hexa >> 18) | 0xF0); // 11110xxx
 		b = (((hexa >> 12) & 0x3F) | 0x80);
 		c = (((hexa >> 6) & 0x3F) | 0x80);
 		d = ((hexa & 0x3F) | 0x80);
 	}
+	/*
+	** From U+200000 to U+3FFFFFF
+	** Utf8 is coded on 5 byte of the form:
+	** 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+	*/
 	else if (hexa < 0x4000000) {
 		a = ((hexa >> 24) | 0xF8); // 111110xx
 		b = (((hexa >> 18) & 0x3F) | 0x80);
@@ -352,6 +377,11 @@ hexatochars(unsigned hexa)
 		d = (((hexa >> 6) & 0x3F) | 0x80);
 		e = ((hexa & 0x3F) | 0x80);
 	}
+	/*
+	** From U+4000000 to U+7FFFFFFF
+	** Utf8 is coded on 6 byte of the form:
+	** 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+	*/
 	else if (hexa < 0x7FFFFFFF) {
 		a = ((hexa >> 30) | 0xFC); // 1111110x
 		b = (((hexa >> 24) & 0x3F) | 0x80);
@@ -360,6 +390,9 @@ hexatochars(unsigned hexa)
 		e = (((hexa >> 6) & 0x3F) | 0x80);
 		f = ((hexa & 0x3F) | 0x80);
 	}
+	/*
+	** Out of unicode range
+	*/
 	else {
 		fprintf(stderr,
 		"betac: [%x] is not in unicode range, file xxx, line %d\n",
