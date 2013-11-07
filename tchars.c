@@ -27,7 +27,7 @@
 ** OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
-** $Id: tchars.c,v 0.2 2013/07/11 20:18:49 pj Exp pj $
+** $Id: tchars.c,v 0.3 2013/09/08 15:49:36 pj Exp pj $
 */
 
 #include <stdio.h>
@@ -325,7 +325,7 @@ int u=1; // print utf8 char
 void
 hexatochars(unsigned hexa)
 {
-	char a=0, b=0, c=0, d=0, e=0, f=0;
+	char a=0, b=0, c=0, d=0;
 
 	/*
 	** From U+000 to U+007F
@@ -355,43 +355,19 @@ hexatochars(unsigned hexa)
 		c = ((hexa & 0x3F) | 0x80);
 	}
 	/*
-	** From U+10000	to U+1FFFFF
+	** From U+10000	to U+10FFFF
 	** Utf8 is coded on 4 byte of the form:
 	** 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
 	*/
-	else if (hexa < 0x200000) {
+	else if (hexa < 0x110000) {
 		a = ((hexa >> 18) | 0xF0); // 11110xxx
 		b = (((hexa >> 12) & 0x3F) | 0x80);
 		c = (((hexa >> 6) & 0x3F) | 0x80);
 		d = ((hexa & 0x3F) | 0x80);
 	}
 	/*
-	** From U+200000 to U+3FFFFFF
-	** Utf8 is coded on 5 byte of the form:
-	** 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-	*/
-	else if (hexa < 0x4000000) {
-		a = ((hexa >> 24) | 0xF8); // 111110xx
-		b = (((hexa >> 18) & 0x3F) | 0x80);
-		c = (((hexa >> 12) & 0x3F) | 0x80);
-		d = (((hexa >> 6) & 0x3F) | 0x80);
-		e = ((hexa & 0x3F) | 0x80);
-	}
-	/*
-	** From U+4000000 to U+7FFFFFFF
-	** Utf8 is coded on 6 byte of the form:
-	** 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
-	*/
-	else if (hexa < 0x7FFFFFFF) {
-		a = ((hexa >> 30) | 0xFC); // 1111110x
-		b = (((hexa >> 24) & 0x3F) | 0x80);
-		c = (((hexa >> 18) & 0x3F) | 0x80);
-		d = (((hexa >> 12) & 0x3F) | 0x80);
-		e = (((hexa >> 6) & 0x3F) | 0x80);
-		f = ((hexa & 0x3F) | 0x80);
-	}
-	/*
 	** Out of unicode range
+	** (RFC 3629 ends Utf8 at U+10FFFF)
 	*/
 	else {
 		fprintf(stderr,
@@ -399,7 +375,7 @@ hexatochars(unsigned hexa)
 		hexa, l);
 	}
 
-	printf("%c%c%c%c%c%c", a, b, c, d, e, f);
+	printf("%c%c%c%c%c%c", a, b, c, d);
 }
 
 
