@@ -27,7 +27,7 @@
 ** OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
-** $Id: tchars.c,v 0.3 2013/09/08 15:49:36 pj Exp pj $
+** $Id: tchars.c,v 0.4 2013/11/07 17:12:37 pj Exp pj $
 */
 
 #include <stdio.h>
@@ -371,7 +371,7 @@ hexatochars(unsigned hexa)
 	*/
 	else {
 		fprintf(stderr,
-		"betac: [%x] is not in unicode range, file xxx, line %d\n",
+		"tchars: [%x] is not in unicode range, file xxx, line %d\n",
 		hexa, l);
 	}
 
@@ -425,7 +425,7 @@ searchrune(char rune[6])
 	searchrune(rune);
 	putchar(c);
 	fprintf(stderr,
-		"betac: [%s] not found, file xxx, line %d\n", 
+		"tchars: [%s] not found, file xxx, line %d\n", 
 		rune, l);
 	return 1;
 }
@@ -564,7 +564,7 @@ inblock(void)
 			continue;
 	} // end of while loop
 	fprintf(stderr, 
-	"betac: .G) not found, file xxx, line %d\n", l);
+	"tchars: .G) not found, file xxx, line %d\n", l);
 	return 1;
 }
 
