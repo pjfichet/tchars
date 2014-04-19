@@ -27,7 +27,7 @@
 ** OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
-** $Id: tchars.c,v 0.4 2013/11/07 17:12:37 pj Exp pj $
+** $Id: tchars.c,v 0.5 2014/03/21 09:54:45 pj Exp pj $
 */
 
 #include <stdio.h>
@@ -375,7 +375,7 @@ hexatochars(unsigned hexa)
 		hexa, l);
 	}
 
-	printf("%c%c%c%c%c%c", a, b, c, d);
+	printf("%c%c%c%c", a, b, c, d);
 }
 
 
