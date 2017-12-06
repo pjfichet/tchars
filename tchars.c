@@ -27,7 +27,7 @@
 ** OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
-** $Id: tchars.c,v 0.5 2014/03/21 09:54:45 pj Exp pj $
+** $Id: tchars.c,v 0.6 2014/04/19 12:33:29 pj Exp pj $
 */
 
 #include <stdio.h>
@@ -311,12 +311,12 @@ char letters[60]="abcdefghijklmnopqrstuvwxyz\
 ABCDEFGHIJKLMNOPQRSTUVWXYZ\
 :;";
 
-char code[10]=")(\\/=|'&";
+// the characters #$*:;5 are currently ignored
+char code[11]=")(\\+/=|'&";
 
 FILE *in; // input file
 int l=1; // line number
 int u=1; // print utf8 char
-
 
 /*
 ** Print the utf8 char corresponding to the
@@ -374,11 +374,8 @@ hexatochars(unsigned hexa)
 		"tchars: [%x] is not in unicode range, file xxx, line %d\n",
 		hexa, l);
 	}
-
 	printf("%c%c%c%c", a, b, c, d);
 }
-
-
 
 /*
 ** Search for rune in runelist alphabeta,
@@ -422,11 +419,11 @@ searchrune(char rune[6])
 	--p;
 	c=*p;
 	*p='\0';	
-	searchrune(rune);
+	searchrune(p);
 	putchar(c);
 	fprintf(stderr,
 		"tchars: [%s] not found, file xxx, line %d\n", 
-		rune, l);
+		p, l);
 	return 1;
 }
 
@@ -488,9 +485,11 @@ betalpha(char c, int bp)
 		if (done==0) {
 			if (r>0) {
 			rune[r]='\0';
-			if (rune[0]=='s') // final sigma
+			if (rune[0]=='s') {
+				// final sigma
 				rune[0]='$';
-				searchrune(rune);
+			}
+			searchrune(rune);
 			r=0;
 			}
 			putchar(c);
@@ -515,7 +514,7 @@ betalpha(char c, int bp)
 ** Inside a betacode block,
 ** transform each line which
 ** does not begin by a '.'
-** until .G) is found.
+** until .CE is found.
 */
 int
 inblock(void)
@@ -531,11 +530,11 @@ inblock(void)
 		}
 		putchar(c);
 		c = getc(in);
-		if (c != 'G')
+		if (c != 'C')
 			goto line;
 		putchar(c);
 		c = getc(in);
-		if (c != ')')
+		if (c != 'E')
 			goto line;
 		putchar(c);
 		c = getc(in);
@@ -564,16 +563,16 @@ inblock(void)
 			continue;
 	} // end of while loop
 	fprintf(stderr, 
-	"tchars: .G) not found, file xxx, line %d\n", l);
+	"tchars: .CE not found, file xxx, line %d\n", l);
 	return 1;
 }
 
 /*
 ** read input file,
 ** and transform betacode which is:
-** - first word after .G
-** - whole line after .GL
-** - whole block between .G( and .G)
+** - first word after .CW
+** - whole line after .CL
+** - whole block between .CS and .CE
 */
 int
 parsefile(void)
@@ -587,31 +586,37 @@ parsefile(void)
 
 		c = getc(in);
 		putchar(c);
-		if (c != 'G')
+		if (c != 'C')
 			goto line;
 
 		c = getc(in);
 		putchar(c);
-
+/*
 		if (c== ' ' || c=='\t') {
 			if (betalpha(0, 1))
 				break;
 			l++;
 			continue;
 		}
-		else if (c=='L' || c =='(') {
+		else if (c=='W' || c =='L' || c == 'S') {
+*/
+		if (c=='W' || c =='L' || c == 'S') {
 			d = c;
 			c=getc(in);
 			putchar(c);
 			if (c!=' ' && c!='\t' && c!='\n')
 				goto line;
-
+			if (d=='W') {
+				if (betalpha(0, 1))
+					break;
+				l++;
+			}
 			if (d=='L'){
 				if (betalpha(0, 0))
 					break;
 				l++;
 			}
-			else if (d=='(') {
+			else if (d=='S') {
 				if (inblock())
 					break;
 			}
@@ -629,6 +634,7 @@ parsefile(void)
 	} // End of while loop
 	return 0;
 }
+
 
 int
 main(int argc, char **argv)
