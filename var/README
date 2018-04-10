@@ -1,0 +1,5 @@
+The files in this directory helped me to create tchars.
+They are kept here as a reminder.
+
+mkgreek.sh: build the list of greek characters.
+utf8doc.c: how to implement utf8 characters.

@@ -1,0 +1,203 @@
+.\"
+.\" DI $Id: tchars.tr,v 0.9 2014/03/22 20:13:23 pj Exp pj $
+.\" DA Pierre‐Jean Fichet
+.\" DS Utroff tchars manual
+.\" DT Utroff tchars manual
+.\" DK utroff tchars troff nroff heirloom tmac xml
+.
+.
+.
+.TH TCHARS 1 '2017‐12‐06'
+.
+.
+.
+.SH NAME
+.PP
+\fBTchars\fR - Translate characters for Troff.
+.
+.
+.
+.SH SYNOPSIS
+.PP
+\fB@BINDIR@/tchars\fR
+[\fB-e\fR]
+\fIfile\fR
+.
+.
+.
+.SH DESCRIPTION
+.PP
+\fITchars\fR is a troff pre‐processor which translate some
+ascii code to complex utf‐8 characters. Actually, it can
+only translate a subset of betacode to polytonic greek.
+.
+.
+.
+.SH OPTIONS
+.TP
+\&\fB-e\fR
+Escape characters: print troff utf‐8 escape sequence in the
+form of \fB\EeU’xxxx’\fR instead of printing the utf‐8
+character itself.
+.
+.
+.
+.SS MACROS
+.RS 3
+.PP
+In the troff document, characters that has to be translated
+must be indicated by one of the following macros:
+.TP
+\&\fBCW\fR \fIcode after before\fR
+Transalte \fIcode\fR, and append \fIbefore\fR and
+\fIafter\fR just before and after the translation.
+.TP
+\&\fBCL\fR \fIcode\fR \fB[\fR\fIcode...\fR\fB]\fR
+Translate the whole line following \fBCL\fR.
+.TP
+\&\fBCS\fR
+Begin a block that has to be translated. Must be followed by
+\fBCE\fR.
+.TP
+\&\fBCE\fR
+Close a block that has to be translated.
+.PP
+For \fItchars\fR to work, you must define these macro to
+call a font which contain polytonic greek characters, as
+follow, for example:
+.PP
+.EX
+\fB.\fR\fBfp\fR 0 G GFSPyrsos otf \fI\Ee" Pyrsos from Greek Font Society\fR
+\fB.\fR\fBde\fR \fBCW\fR
+\fI\Ee\fR\fB\Ee$3\fR\fB\EefG\fR\fI\Ee\fR\fB\Ee$1\fR\fB\EefR\fR\fI\Ee\fR\fB\Ee$2\fR
+\fB.\fR\fB.\fR
+\fB.\fR\fBde\fR \fBCL\fR
+\fB\EefG\fR\fI\Ee\fR\fB\Ee$*\fR\fB\EefR\fR
+\fB.\fR\fB.\fR
+\fB.\fR\fBde\fR \fBCS\fR
+\fB.\fR \fBft\fR G
+\fB.\fR\fB.\fR
+\fB.\fR\fBde\fR \fBCE\fR
+\fB.\fR \fBft\fR R
+\fB.\fR\fB.\fR
+.EE
+.
+.
+.
+.SS CODE
+.RS 3
+.PP
+A rune is composed of an ascii letter, followed by a
+representation of an accent.
+\fITchars\fR actually understand the following accents:
+.TP
+\&+ dialytika ̈
+.TP
+\&& macron ̄
+.TP
+\&' vrachy ̆
+.TP
+\&) psili ̓
+.TP
+\&( dasia ̔
+.TP
+\&\Ee varia ̀
+.TP
+\&/ oxia ́
+.TP
+\&= perispomeni ͂
+.TP
+\&| ypogegrammeni ͅ
+.PP
+The order is significant, it
+must be: \fB+&’)(\Ee/=|\fR
+.PP
+\fITchars\fR actually understand the following letters:
+.TP
+\&A Α ALPHA, a α alpha
+.TP
+\&B Β BETA, b β beta
+.TP
+\&C Ξ XI, c ξ xi
+.TP
+\&D Δ DELTA, d δ delta
+.TP
+\&E Ἑ EPSILON, e ε epsilon
+.TP
+\&F Φ PHI, f φ phi
+.TP
+\&G Γ GAMMA, g γ gamma
+.TP
+\&H Η ETA, h η eta
+.TP
+\&I Ι IOTA, i ι iota
+.TP
+\&K Κ KAPPA, k κ kappa
+.TP
+\&L Λ LAMBDA, l λ lambda
+.TP
+\&M Μ MU, m μ mu
+.TP
+\&N Ν NU, n ν nu
+.TP
+\&O Ο OMICRON, o ο omicron
+.TP
+\&P Π PI, p π pi
+.TP
+\&R Ρ RHO, r ρ rhô
+.TP
+\&S Σ SIGMA, s σ sigma
+.TP
+\&T Τ TAU, t τ tau
+.TP
+\&U Υ UPSILON, u υ upsilon
+.TP
+\&W Ω OMEGA, w ω omega
+.TP
+\&X Χ CHI, x χ chi
+.TP
+\&Y Ψ PSI, y ψ psi
+.TP
+\&Z Ζ ZETA, z ζ zeta
+.
+.
+.
+.SH EXAMPLE
+.PP
+.EX
+The word physis in polytonic greek is written:
+\fB.\fR\fBCW\fR fu/sis .
+.EE
+.
+.
+.
+.SH FILES
+.PP
+\fI@BINDIR@/tchars\fR
+.
+.
+.
+.SH SEE ALSO
+.PP
+\&utmac(7) <../utmac/utmac.tr>.
+.
+.
+.
+.SH LICENSE
+.PP
+\fITchars\fR and this man page are distributed under a
+\&two clause BSD <../share/bsd2.tr>
+license.
+.
+.
+.
+.SH BUGS & HELP
+.PP
+Don’t hesitate to ask questions at help at utroff dot org.
+Please, send bugs and patches at help at utroff dot org.
+.
+.
+.
+.SH AUTHOR
+.PP
+Pierre‐Jean Fichet.

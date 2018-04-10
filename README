@@ -1,0 +1,41 @@
+# tchars readme
+#################
+
+# Presentation
+==============
+
+Tchars is a troff pre-processor which translate a simple coded
+information to complex utf-8 characters.  Actually, it can only
+translate a subset of betacode to polytonic greek.
+
+# Build
+=======
+
+To build and install tchars and its manual page, run :
+
+    make
+    make install
+
+To uninstall and clean, run :
+
+    make uninstall
+    make clean
+
+
+# License
+=========
+
+Tchars and its man page are distributed under a two clause BSD
+license <../share/bsd2.tr>.
+
+# Help and bugs
+===============
+
+Don’t hesitate to ask questions at help at utroff dot org.
+Please, send bugs and patches at help at utroff dot org.
+
+# Author
+========
+
+Pierre-Jean Fichet.
+

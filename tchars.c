@@ -27,7 +27,7 @@
 ** OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ** SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 **
-** $Id: tchars.c,v 0.6 2014/04/19 12:33:29 pj Exp pj $
+** $Id: tchars.c,v 0.7 2017/12/06 09:05:30 pj Exp pj $
 */
 
 #include <stdio.h>
