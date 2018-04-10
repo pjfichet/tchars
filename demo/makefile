@@ -1,13 +1,17 @@
 # Formatting text with Troff
 
 # Prefix directory
-PREFIX=/opt/utroff
+PREFIX=/usr/local
 # Where to find heirloom troff binaries 
 BINDIR=$(PREFIX)/bin
 # Where to find heirloom troff libraries
 LIBDIR=$(PREFIX)/lib
-# Where to find troff and OTF fonts
-TROFFONTS = $(LIBDIR)/font/:/usr/share/fonts/OTF/:/home/pj/doc/troff/font/
+# Where to find utmac macros
+MACDIR=$(LIBDIR)/tmac
+# Where to find troff fonts
+FNTDIR=$(LIBDIR)/font
+# Where to find OTF fonts
+OTFDIR=/usr/share/fonts/OTF
 
 # Where to find Heirloom tools
 # Heirloom troff
@@ -18,6 +22,7 @@ DPOST=$(BINDIR)/dpost
 TCHARS=$(BINDIR)/tchars
 
 TROFFMACS=$(MACDIR)/
+TROFFONTS=$(FNTDIR)/:$(OTFDIR)/
 export TROFFONTS
 export TROFFMACS
 
