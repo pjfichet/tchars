@@ -1,61 +1,44 @@
 # Packaging directory
 DESTDIR=
 # Prefix directory
-PREFIX=/opt/utroff
+PREFIX=/usr/local/
 # Where to place binaries
 BINDIR=$(PREFIX)/bin
 # Where to place libraries
 MANDIR=$(PREFIX)/man
-# Install binary
-INSTALL = /usr/bin/install
+
 # C compiler
-CC=gcc
+CC=cc
 # compilier flags
-CFLAGS=-O
-# Compiler warning
-WARN=-Wall
-# Support for locale specific character 
-EUC=-DEUC
+CFLAGS=-Wall -O
 # Linker flags
 LDFLAGS=
-# Additionnal libraries to link with
-LIBS=
-# C preprocessor flags.
-# Use -D_GNU_SOURCE for Linux with GNU libc.
-# Use -D_INCLUDE__STDC_A1_SOURCE for HP-UX.
-CPPFLAGS=-D_GNU_SOURCE
-# Strip
-STRIP=strip -s -R .comment -R .note
+OBJS=tchars.o
 
-BIN=tchars
-MAN=tchars.1
-
-
-all: $(BIN) $(MAN)
+all: tchars tchars.1
 
 clean:
-	rm -rf $(BIN) $(BIN:%=%.o) $(MAN)
+	rm -rf $(OBJS) tchars tchars.1
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) $<
+tchars: tchars.o
+	$(CC) -o $@ $(OBJS) $(LDFLAGS)
 
 %.1 %.7: %.man
 	sed -e "s|@BINDIR@|$(BINDIR)|g" $< > $@
 
+$(DESTDIR)$(BINDIR)/%: %
+	test -d $(DESTDIR)$(BINDIR) || mkdir -p $(DESTDIR)$(BINDIR)
+	install -c $< $@
 
-$(DESTDIR)$(BINDIR) \
-$(DESTDIR)$(MANDIR)/man1:
-	test -d $@ || mkdir -p $@
+$(DESTDIR)$(MANDIR)/man1/%: %
+	test -d $(DESTDIR)$(MANDIR)/man1 || mkdir -p $(DESTDIR)$(MANDIR)/man1
+	install -c -m 644 $< $@
 
-$(DESTDIR)$(MANDIR)/man1/%: % $(DESTDIR)$(MANDIR)/man1
-	$(INSTALL) -c -m 644 $(@F) $@
-
-$(DESTDIR)$(BINDIR)/%: % $(DESTDIR)$(BINDIR)
-	$(INSTALL) -c $(@F) $@
-
-install: $(BIN:%=$(DESTDIR)$(BINDIR)/%) $(MAN:%=$(DESTDIR)$(MANDIR)/man1/%)
+install: $(DESTDIR)$(BINDIR)/tchars $(DESTDIR)$(MANDIR)/man1/tchars.1
 
 uninstall:
-	rm $(BIN:%=$(DESTDIR)$(BINDIR)/%)
-	rmdir $(DESTDIR)$(BINDIR)
-	rm $(MAN:%=$(DESTDIR)$(MANDIR)/man1/%)
-	rmdir $(DESTDIR)$(MANDIR)/man1 $(DESTDIR)$(MANDIR)
-
+	rm -f $(DESTDIR)$(BINDIR)/tchars
+	rm -f $(DESTDIR)$(MANDIR)/man1/tchars.1
 
