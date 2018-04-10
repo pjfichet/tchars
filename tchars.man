@@ -195,22 +195,13 @@ The word physis in polytonic greek is written:
 .
 .SH SEE ALSO
 .PP
-\&utmac(7) <../utmac/utmac.tr>.
+\&utmac(7)
 .
 .
 .
 .SH LICENSE
 .PP
-\fITchars\fR and this man page are distributed under a
-\&two clause BSD <../share/bsd2.tr>
-license.
-.
-.
-.
-.SH BUGS & HELP
-.PP
-Don’t hesitate to ask questions at help at utroff dot org.
-Please, send bugs and patches at help at utroff dot org.
+\fITchars\fR and this man page are distributed the ISC license.
 .
 .
 .
