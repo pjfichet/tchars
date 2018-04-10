@@ -1,32 +1,28 @@
 # Formatting text with Troff
 
-# Prefix directory
-PREFIX=/usr/local
-# Where to find heirloom troff binaries 
-BINDIR=$(PREFIX)/bin
-# Where to find heirloom troff libraries
-LIBDIR=$(PREFIX)/lib
-# Where to find utmac macros
-MACDIR=$(LIBDIR)/tmac
-# Where to find troff fonts
-FNTDIR=$(LIBDIR)/font
-# Where to find OTF fonts
-OTFDIR=/usr/share/fonts/OTF
-
 # Where to find Heirloom tools
-# Heirloom troff
-TROFF=$(BINDIR)/troff
-# Heirloom dpost
-DPOST=$(BINDIR)/dpost
-# Where to find Utroff tools
-TCHARS=$(BINDIR)/tchars
+TROFF=/opt/utroff/bin/troff
+DPOST=/opt/utroff/bin/dpost
+# Where to find tchars
+TCHARS=../tchars
+#where to find troff fonts
+FNTDIR=/opt/utroff/lib/font
+# where to find otf fonts
+OTFDIR=GFS_PYRSOS
 
-TROFFMACS=$(MACDIR)/
 TROFFONTS=$(FNTDIR)/:$(OTFDIR)/
 export TROFFONTS
-export TROFFMACS
 
-all: tchars.pdf
+
+GFS_Pyrsos.zip:
+	@echo "Downloading a GFSPyrsos.otf font (OFL license)"
+	@wget -q http://greekfontsociety-gfs.gr/_assets/fonts/GFS_Pyrsos.zip
+
+GFS_PYRSOS/GFSPyrsos.otf: GFS_Pyrsos.zip
+	@unzip -q GFS_Pyrsos.zip $@
+
+
+all: GFS_PYRSOS/GFSPyrsos.otf tchars.pdf
 
 %.tmp: %.tr
 	@echo "Generating $@"
@@ -46,5 +42,6 @@ all: tchars.pdf
 		-sFONTPATH=$(TROFFONTS) $< $@
 
 clean:
-	@rm -f *.tmp *.to *.ps *.pdf
+	@rm -rf GFS_PYRSOS GFS_Pyrsos.zip
+	@rm -f tchars.tmp tchars.to tchars.ps tchars.pdf
 
