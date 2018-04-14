@@ -1,5 +1,5 @@
-.do xflag 3
-.fp 0 G GFSPyrsos otf \" Pyrsos from Greek Font Society
+.fp - G GFSPyrsos \" Pyrsos from the Greek Font Society
+.fp - R LinLibertine_R
 .de CW
 \\$3\fG\\$1\fR\\$2
 ..
