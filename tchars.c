@@ -409,7 +409,7 @@ searchrune(char rune[6])
 			if (u)
 				hexatochars(mid->hexa);
 			else
-				printf("\\U'%x'", mid->hexa);
+				printf("\\[u%04x]", mid->hexa);
 			return 0;
 		}
 	}
