@@ -294,12 +294,12 @@ runelist alphabeta[] =
 	{"z", 0x03B6,},
 };
 
-char letters[60]="abcdefghijklmnopqrstuvwxyz\
+char letters[54]="abcdefghijklmnopqrstuvwxyz\
 ABCDEFGHIJKLMNOPQRSTUVWXYZ\
 :;";
 
 // the characters #$*:;5 are currently ignored
-char code[11]=")(\\+/=|'&";
+char code[9]=")(\\+/=|'&";
 
 FILE *in; // input file
 int l=1; // line number
@@ -360,6 +360,21 @@ hexatochars(unsigned hexa)
 		fprintf(stderr,
 		"tchars: [%x] is not in unicode range, file xxx, line %d\n",
 		hexa, l);
+	}
+	if (a == 0) {
+		return;
+	}
+	if (b == 0) {
+		printf("%c", a);
+		return;
+	}
+	if (c == 0) {
+		printf("%c%c", a, b);
+		return;
+	}
+	if (d == 0) {
+		printf("%c%c%c", a, b, c);
+		return;
 	}
 	printf("%c%c%c%c", a, b, c, d);
 }
@@ -430,16 +445,18 @@ betalpha(char c, int bp)
 	int r=0;
 	int done=0;
 	char *p;
-
-	for (p=letters; *p; p++){
-		if (c==*p) {
-			rune[r++]=c;
-			done=1;
-			break;
+	if (c!=0) {
+		for (p=letters; *p; p++){
+			if (c==*p) {
+				rune[r++]=c;
+				done=1;
+				break;
+			}
+		}
+		if (done==0) {
+			putchar(c);
 		}
 	}
-	if (done==0)
-		putchar(c);
 
 
 	while ( (c=getc(in)) != EOF ) {
