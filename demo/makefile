@@ -7,7 +7,7 @@ FNTDIR=$(PREFIX)/lib/font
 TCHARS=$(BINDIR)/tchars
 OTFDIR=GFS_PYRSOS
 
-all: devutf/GFSPyrsos tchars.pdf
+all: tchars.pdf
 
 devutf:
 	@echo "Creating the devutf directory."
@@ -33,7 +33,7 @@ devutf/GFSPyrsos: devutf/GFSPyrsos.ttf
 	@cat $< | $(mkfn) -b -l -o -r720 -Slatn -t $(notdir $@) -f "$<" > $@
 
 
-%.pdf: %.tr
+%.pdf: %.tr devutf/GFSPyrsos
 	@echo "Generating $@"
 	@$(TCHARS) $< | $(ROFF) -F./ | $(PDF) -pa4 > $@
 
