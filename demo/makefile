@@ -1,9 +1,9 @@
-PREFIX=$(HOME)/dev
+PREFIX=$(HOME)/.local
 BINDIR=$(PREFIX)/bin
 ROFF=$(BINDIR)/roff
 PDF=$(BINDIR)/pdf
 mkfn=$(BINDIR)/mkfn
-FNTDIR=$(PREFIX)/lib/font
+FNTDIR=$(PREFIX)/share/font
 TCHARS=$(BINDIR)/tchars
 OTFDIR=GFS_PYRSOS
 
